@@ -2,33 +2,33 @@ const express = require('express');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
-var { Teachers } = require('../models/teacher');
+var { Courses } = require('../models/courses');
 
-// => localhost:3000/teachers/
+// => localhost:3000/courses/
 router.get('/', (req, res) => {
     // Teachers.find((err, docs) => {
     //     console.log(docs);
     //     if (!err) { res.send(docs); }
     //     else { console.log('Error in Retriving Teachers :' + JSON.stringify(err, undefined, 2)); }
     // });
-    Teachers.find({}).then(content => {
+    Courses.find({}).then(content => {
 
         console.log("data was fetched");
         console.log(content);
         res.send(content);
-})
-.catch(err => { console.log("Error in Retriving Teachers") })
+    })
+    .catch(err => { console.log("Error in Retriving Courses") })
 });
 
-router.get('/:id', (req, res) => {
-    if (!ObjectId.isValid(req.params.id))
-        return res.status(400).send(`No record with given id : ${req.params.id}`);
+// router.get('/:id', (req, res) => {
+//     if (!ObjectId.isValid(req.params.id))
+//         return res.status(400).send(`No record with given id : ${req.params.id}`);
 
-    Teachers.findById(req.params.id, (err, doc) => {
-        if (!err) { res.send(doc); }
-        else { console.log('Error in Retriving Teacher :' + JSON.stringify(err, undefined, 2)); }
-    });
-});
+//     Teachers.findById(req.params.id, (err, doc) => {
+//         if (!err) { res.send(doc); }
+//         else { console.log('Error in Retriving Teacher :' + JSON.stringify(err, undefined, 2)); }
+//     });
+// });
 
 // router.post('/', (req, res) => {
 //     var emp = new Teachers({
