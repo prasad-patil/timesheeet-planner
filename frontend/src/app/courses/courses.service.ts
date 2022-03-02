@@ -1,22 +1,22 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Issue } from './Courses.model';
+import { Course, Issue } from './Courses.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
 
-  private readonly API_URL = 'https://api.github.com/repos/angular/angular/issues';
+  private readonly API_URL = 'http://localhost:3000/';
 
-  dataChange: BehaviorSubject<Issue[]> = new BehaviorSubject<Issue[]>([]);
+  dataChange: BehaviorSubject<Course[]> = new BehaviorSubject<Course[]>([]);
   // Temporarily stores data from dialogs
   dialogData: any;
 
   constructor (private httpClient: HttpClient) {}
 
-  get data(): Issue[] {
+  get data(): Course[] {
     return this.dataChange.value;
   }
 
@@ -24,9 +24,8 @@ export class CoursesService {
     return this.dialogData;
   }
 
-  /** CRUD METHODS */
-  getAllIssues(): void {
-    this.httpClient.get<Issue[]>(this.API_URL).subscribe(data => {
+  getAllCourses(): void {
+    this.httpClient.get<Course[]>(`${this.API_URL}courses`).subscribe(data => {
         this.dataChange.next(data);
       },
       (error: HttpErrorResponse) => {
@@ -35,15 +34,15 @@ export class CoursesService {
   }
 
   // DEMO ONLY, you can find working methods below
-  addIssue (issue: Issue): void {
-    this.dialogData = issue;
+  addCourse (course: Course): void {
+    this.dialogData = course;
   }
 
-  updateIssue (issue: Issue): void {
-    this.dialogData = issue;
+  updateCourse (course: Course): void {
+    this.dialogData = course;
   }
 
-  deleteIssue (id: number): void {
+  deleteCourse (id: number): void {
     console.log(id);
   }
 }

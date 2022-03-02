@@ -6,4 +6,10 @@ export class Issue {
     created_at!: string;
     updated_at!: string;
   }
-  
+
+export class Course {
+  course_id: number;
+  course_name: string;
+  course_year: string;
+  course_sem: number;
+}

@@ -13,35 +13,26 @@
             The actual rendered columns are set as a property on the row definition" -->
   
       <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
+      <ng-container matColumnDef="course_id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Course Id</mat-header-cell>
+        <mat-cell *matCellDef="let row" >{{row.course_id}}</mat-cell>
       </ng-container>
   
-      <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.title}}</mat-cell>
+      <ng-container matColumnDef="course_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.course_name}}</mat-cell>
       </ng-container>
   
-      <ng-container matColumnDef="state">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>State</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.state}}</mat-cell>
+      <ng-container matColumnDef="course_year">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Course Year</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.course_year}}</mat-cell>
       </ng-container>
   
-      <ng-container matColumnDef="url">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Url</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.url}}</mat-cell>
+      <ng-container matColumnDef="course_sem">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Course Semister</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.course_sem}}</mat-cell>
       </ng-container>
   
-      <ng-container matColumnDef="created_at">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.created_at}}</mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="updated_at">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Updated at</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.updated_at}}</mat-cell>
-      </ng-container>
   
       <!-- actions -->
       <ng-container matColumnDef="actions">
@@ -52,11 +43,11 @@
         </mat-header-cell>
   
         <mat-cell *matCellDef="let row; let i=index;">
-          <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.title, row.state, row.url, row.created_at, row.updated_at)">
+          <button mat-icon-button color="accent" (click)="startEdit(i, row.course_id, row.course_name, row.course_year, row.course_sem)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
   
-          <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.title, row.state, row.url)">
+          <button mat-icon-button color="accent" (click)="deleteItem(i, row.course_id, row.course_name, row.course_year, row.course_sem)">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button>
         </mat-cell>

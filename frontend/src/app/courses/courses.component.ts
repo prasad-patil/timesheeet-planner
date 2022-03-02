@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { fromEvent, BehaviorSubject, Observable, merge, map } from 'rxjs';
-import { Issue } from './Courses.model';
+import { Issue, Course } from './Courses.model';
 import { CoursesService } from './courses.service';
 import { AddDialogComponent } from './dialogs/add/add.dialog.component';
 import { DeleteDialogComponent } from './dialogs/delete/delete.dialog.component';
@@ -17,7 +17,7 @@ import { EditDialogComponent } from './dialogs/edit/edit.dialog.component';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
-  displayedColumns = ['id', 'title', 'state', 'url', 'created_at', 'updated_at', 'actions'];
+  displayedColumns = ['course_id', 'course_name', 'course_year', 'course_sem', 'actions'];
   courseDatabase: CoursesService;
   dataSource: CourseDataSource;
   index: number;
@@ -41,7 +41,7 @@ export class CoursesComponent implements OnInit {
 
   addNew() {
     const dialogRef = this.dialog.open(AddDialogComponent, {
-      data: {issue: Issue }
+      data: {course: Course }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -54,19 +54,19 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  startEdit(i: number, id: number, title: string, state: string, url: string, created_at: string, updated_at: string) {
-    this.id = id;
+  startEdit(i: number, course_id: number, course_name: string, course_year: string, course_sem: string) {
+    this.id = course_id;
     // index row is used just for debugging proposes and can be removed
     this.index = i;
     console.log(this.index);
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: {id: id, title: title, state: state, url: url, created_at: created_at, updated_at: updated_at}
+      data: {course_id, course_name, course_year, course_sem}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         // When using an edit things are little different, firstly we find record inside CoursesService by id
-        const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.course_id === this.id);
         // Then you update that record using data from dialogData (values you enetered)
         this.courseDatabase.dataChange.value[foundIndex] = this.CoursesService.getDialogData();
         // And lastly refresh table
@@ -75,16 +75,16 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  deleteItem(i: number, id: number, title: string, state: string, url: string) {
+  deleteItem(i: number, course_id: number, course_name: string, course_year: string, course_sem: string) {
     this.index = i;
-    this.id = id;
+    this.id = course_id;
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: {id: id, title: title, state: state, url: url}
+      data: {course_id, course_name, course_year, course_sem}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.course_id === this.id);
         // for delete we use splice in order to remove single object from CoursesService
         this.courseDatabase.dataChange.value.splice(foundIndex, 1);
         this.refreshTable();
@@ -114,7 +114,7 @@ export class CoursesComponent implements OnInit {
 
 }
 
-export class CourseDataSource extends DataSource<Issue> {
+export class CourseDataSource extends DataSource<Course> {
   _filterChange = new BehaviorSubject('');
 
   get filter(): string {
@@ -125,8 +125,8 @@ export class CourseDataSource extends DataSource<Issue> {
     this._filterChange.next(filter);
   }
 
-  filteredData: Issue[] = [];
-  renderedData: Issue[] = [];
+  filteredData: Course[] = [];
+  renderedData: Course[] = [];
 
   constructor(public coursesService: CoursesService,
               public _paginator: MatPaginator,
@@ -137,7 +137,7 @@ export class CourseDataSource extends DataSource<Issue> {
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Issue[]> {
+  connect(): Observable<Course[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.coursesService.dataChange,
@@ -146,13 +146,13 @@ export class CourseDataSource extends DataSource<Issue> {
       this._paginator.page
     ];
 
-    this.coursesService.getAllIssues();
+    this.coursesService.getAllCourses();
 
 
     return merge(...displayDataChanges).pipe(map( () => {
         // Filter data
-        this.filteredData = this.coursesService.data.slice().filter((issue: Issue) => {
-          const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
+        this.filteredData = this.coursesService.data.slice().filter((course: Course) => {
+          const searchStr = (course.course_id + course.course_name + course.course_sem + course.course_year).toLowerCase();
           return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
         });
 
@@ -171,7 +171,7 @@ export class CourseDataSource extends DataSource<Issue> {
 
 
   /** Returns a sorted copy of the database data. */
-  sortData(data: Issue[]): Issue[] {
+  sortData(data: Course[]): Course[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -181,12 +181,10 @@ export class CourseDataSource extends DataSource<Issue> {
       let propertyB: number | string = '';
 
       switch (this._sort.active) {
-        case 'id': [propertyA, propertyB] = [a.id, b.id]; break;
-        case 'title': [propertyA, propertyB] = [a.title, b.title]; break;
-        case 'state': [propertyA, propertyB] = [a.state, b.state]; break;
-        case 'url': [propertyA, propertyB] = [a.url, b.url]; break;
-        case 'created_at': [propertyA, propertyB] = [a.created_at, b.created_at]; break;
-        case 'updated_at': [propertyA, propertyB] = [a.updated_at, b.updated_at]; break;
+        case 'course_id': [propertyA, propertyB] = [a.course_id, b.course_id]; break;
+        case 'course_name': [propertyA, propertyB] = [a.course_name, b.course_name]; break;
+        case 'course_sem': [propertyA, propertyB] = [a.course_sem, b.course_sem]; break;
+        case 'course_year': [propertyA, propertyB] = [a.course_year, b.course_year]; break;
       }
 
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
