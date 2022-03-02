@@ -1,5 +1,5 @@
 <div class="container">
-  <h3 mat-dialog-title>Issue id: {{data.id}}</h3>
+  <h3 mat-dialog-title>Course: {{data.course_name}}</h3>
 
   <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
 
@@ -13,7 +13,7 @@
     <!--Textarea for demo purposes-->
     <div class="form">
       <mat-form-field color="accent">
-        <textarea matInput #input class="form-control" placeholder="Title" [(ngModel)]="data.course_name" name="title" required ></textarea>
+        <input matInput #input class="form-control" placeholder="Course Name" [(ngModel)]="data.course_name" name="name" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
@@ -21,23 +21,15 @@
     <!--Contains mat-hint for characters count and has maxLengt set-->
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #inputstate class="form-control" placeholder="State" [(ngModel)]="data.course_year" name="state" maxlength="10" required >
+        <input matInput #inputstate class="form-control" placeholder="Course Year" [(ngModel)]="data.course_year" name="year" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-        <mat-hint align="end">{{inputstate.value?.length || 0}}/10</mat-hint>
       </mat-form-field>
     </div>
 
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #inputstate class="form-control" placeholder="State" [(ngModel)]="data.course_sem" name="state" maxlength="10" required >
+        <input matInput #inputstate class="form-control" placeholder="Course Semister" [(ngModel)]="data.course_sem" name="state" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-        <mat-hint align="end">{{inputstate.value?.length || 0}}/10</mat-hint>
-      </mat-form-field>
-    </div>
-
-    <div class="form">
-      <mat-form-field color="accent">
-        <input matInput placeholder="Updated at" [(ngModel)]="data.updated_at" name="updated_at">
       </mat-form-field>
     </div>
 
