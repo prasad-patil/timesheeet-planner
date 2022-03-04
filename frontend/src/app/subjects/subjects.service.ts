@@ -26,7 +26,13 @@ export class SubjectsService {
   }
 
   getSubjects() {
-    forkJoin([this.httpClient.get(`${this.API_URL}subjects`), this.httpClient.get(`${this.API_URL}courses`)]).pipe(
+    this.getSubject$().subscribe((sub: Subject[])=>{
+      this.dataChange.next(sub);
+    });
+  }
+
+  getSubject$() {
+    return forkJoin([this.httpClient.get(`${this.API_URL}subjects`), this.httpClient.get(`${this.API_URL}courses`)]).pipe(
       map((results: Array<any>)=> {
         let subjects: Subject[] = [];
         (results[0] as Array<any>).forEach(sub => {
@@ -39,9 +45,7 @@ export class SubjectsService {
         console.log('Handling error locally and rethrowing it...', err);
         return throwError(err);
       })
-    ).subscribe((sub: Subject[])=>{
-      this.dataChange.next(sub);
-    });
+    )
   }
 
   private getCourseById(course: Course[], id: number): Course | undefined {
