@@ -1,5 +1,5 @@
 <div class="container">
-  <h3 mat-dialog-title>Add new Issue</h3>
+  <h3 mat-dialog-title>Add New Subject</h3>
 
   <form class="mat-dialog-content" (ngSubmit)="submit()" #formControl="ngForm">
 
@@ -13,13 +13,24 @@
     <!--Textarea for demo purposes-->
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #inputstate class="form-control" placeholder="Course Name" [(ngModel)]="data.course_name" name="name" required >
+        <input matInput #inputstate class="form-control" placeholder="Subject Name" [(ngModel)]="data.name" name="name" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
 
-    <!--Contains mat-hint for characters count and has maxLengt set-->
     <div class="form">
+      <mat-form-field color="accent">
+        <mat-label>Select Course</mat-label>
+        <mat-select [(ngModel)]="data.course" name="course">
+          <mat-option *ngFor="let course of courses" [value]="course.course_id">
+            {{course.course_name}} (Year {{course.course_year}} , Sem {{course.course_sem}})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!--Contains mat-hint for characters count and has maxLengt set-->
+    <!-- <div class="form">
       <mat-form-field color="accent">
         <input matInput #inputstate class="form-control" placeholder="Course Year" [(ngModel)]="data.course_year" name="yeat" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
@@ -31,7 +42,7 @@
         <input matInput #inputstate class="form-control" placeholder="Course Semister" [(ngModel)]="data.course_sem" name="course_sem" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
-    </div>
+    </div> -->
 
     <div mat-dialog-actions>
       <button mat-button type="submit" [disabled]="!formControl.valid">Save</button>

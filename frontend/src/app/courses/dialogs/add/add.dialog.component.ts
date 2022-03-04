@@ -3,6 +3,7 @@ import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { CoursesService } from '../../courses.service';
 import { Issue, Course } from '../../Courses.model';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-add.dialog',
@@ -13,7 +14,8 @@ import { Issue, Course } from '../../Courses.model';
 export class AddDialogComponent {
   constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Course,
-              public dataService: CoursesService) { }
+              private notificationService: NotificationService,
+              public courseService: CoursesService) { }
 
   formControl = new FormControl('', [
     Validators.required
@@ -27,7 +29,19 @@ export class AddDialogComponent {
   }
 
   submit() {
-  // empty stuff
+    this.courseService.saveCourse(this.data).subscribe(({course_id, course_name, course_sem, course_year})=>{
+      let course: Course = {
+        course_id,
+        course_name,
+        course_sem,
+        course_year
+      }
+      this.courseService.addCourse(course);
+      this.dialogRef.close(1);
+      // this.notificationService.showSuccess('Course has been updated successfully!')
+    }, err => {
+      this.notificationService.showError('There was some error while updating course!')
+    })
   }
 
   onNoClick(): void {
@@ -35,6 +49,6 @@ export class AddDialogComponent {
   }
 
   public confirmAdd(): void {
-    this.dataService.addCourse(this.data);
+    this.courseService.addCourse(this.data);
   }
 }

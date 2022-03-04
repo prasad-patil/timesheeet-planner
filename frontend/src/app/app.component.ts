@@ -8,7 +8,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 })
 export class AppComponent {
   mobileQuery: MediaQueryList;
-  navMenuList = [{ name: 'Manage Courses', url: 'courses' }, { name: 'Subjects', url: 'subjects' }, { name: 'Teachers', url: 'teachers' }];
+  navMenuList = [{ name: 'Courses', url: 'courses' }, { name: 'Subjects', url: 'subjects' }, { name: 'Teachers', url: 'teachers' }];
 
 
   fillerContent = Array.from(

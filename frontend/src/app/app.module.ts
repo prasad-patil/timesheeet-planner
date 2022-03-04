@@ -14,6 +14,10 @@ import { CustomMaterialModule } from './material.module';
 import { AddDialogComponent } from './courses/dialogs/add/add.dialog.component';
 import { EditDialogComponent } from './courses/dialogs/edit/edit.dialog.component';
 import { DeleteDialogComponent } from './courses/dialogs/delete/delete.dialog.component';
+import { ToastrModule } from 'ngx-toastr';
+import { AddSubjectDialogComponent } from './subjects/dialogs/add/add-subject.dialog.component';
+import { EditSubjectDialogComponent } from './subjects/dialogs/edit/edit-subject.dialog.component';
+import { DeleteSubjectDialogComponent } from './subjects/dialogs/delete/delete.dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,11 +27,18 @@ import { DeleteDialogComponent } from './courses/dialogs/delete/delete.dialog.co
     TeachersComponent,
     AddDialogComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    AddSubjectDialogComponent,
+    EditSubjectDialogComponent,
+    DeleteSubjectDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      closeButton: true
+    }),
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,

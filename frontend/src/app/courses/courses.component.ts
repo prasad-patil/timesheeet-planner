@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { fromEvent, BehaviorSubject, Observable, merge, map } from 'rxjs';
+import { NotificationService } from '../shared/notification.service';
 import { Issue, Course } from './Courses.model';
 import { CoursesService } from './courses.service';
 import { AddDialogComponent } from './dialogs/add/add.dialog.component';
@@ -25,7 +26,8 @@ export class CoursesComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
-              public CoursesService: CoursesService) {}
+              public CoursesService: CoursesService,
+              public notificationService: NotificationService) {}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -48,6 +50,7 @@ export class CoursesComponent implements OnInit {
       if (result === 1) {
         // After dialog is closed we're doing frontend updates
         // For add we're just pushing a new row inside CoursesService
+        this.notificationService.showSuccess('Course has been added successfully!')
         this.courseDatabase.dataChange.value.push(this.CoursesService.getDialogData());
         this.refreshTable();
       }
@@ -65,6 +68,7 @@ export class CoursesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
+        this.notificationService.showSuccess('Course has been updated successfully!');
         // When using an edit things are little different, firstly we find record inside CoursesService by id
         const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.course_id === this.id);
         // Then you update that record using data from dialogData (values you enetered)
@@ -84,6 +88,7 @@ export class CoursesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
+        this.notificationService.showSuccess('Course has been deleted successfully!');
         const foundIndex = this.courseDatabase.dataChange.value.findIndex(x => x.course_id === this.id);
         // for delete we use splice in order to remove single object from CoursesService
         this.courseDatabase.dataChange.value.splice(foundIndex, 1);

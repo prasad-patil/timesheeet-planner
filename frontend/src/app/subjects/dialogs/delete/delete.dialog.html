@@ -3,13 +3,10 @@
   <div mat-dialog-content>
     Id: {{data.course_id}}
     <p></p>
-    Course Name: {{data.course_name}}
+    Subject Name: {{data.course_name}}
     <p></p>
-    Course Year: {{data.course_year}}
+    Course: {{data?.course?.course_name}} (Year {{data?.course?.course_year}} , Sem {{data?.course?.course_sem}})
     <p></p>
-    Course Semister: {{data.course_sem}}
-    <p></p>
-    <p><b>Note:</b> Once you delete this course, all subjects associated with this course will be deleted.</p>
   </div>
 
   <div mat-dialog-actions>

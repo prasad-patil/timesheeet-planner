@@ -1,6 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Component, Inject} from '@angular/core';
-import { CoursesService } from '../../courses.service';
+import { SubjectsService } from '../../subjects.service';
 
 
 @Component({
@@ -8,17 +8,17 @@ import { CoursesService } from '../../courses.service';
   templateUrl: '../../dialogs/delete/delete.dialog.html',
   styleUrls: ['../../dialogs/delete/delete.dialog.css']
 })
-export class DeleteDialogComponent {
+export class DeleteSubjectDialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<DeleteDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: CoursesService) { }
+  constructor(public dialogRef: MatDialogRef<DeleteSubjectDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any, public subjectService: SubjectsService) { }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   confirmDelete(): void {
-    this.dataService.deleteCourse(this.data.course_id).subscribe(()=>{
+    this.subjectService.deleteSubject(this.data.subject_id).subscribe(()=>{
       this.dialogRef.close(1);
     });
   }

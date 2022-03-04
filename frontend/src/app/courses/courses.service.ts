@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Course, Issue } from './Courses.model';
 
 @Injectable({
@@ -25,12 +25,16 @@ export class CoursesService {
   }
 
   getAllCourses(): void {
-    this.httpClient.get<Course[]>(`${this.API_URL}courses`).subscribe(data => {
+    this.getCoursesFromDB().subscribe(data => {
         this.dataChange.next(data);
       },
       (error: HttpErrorResponse) => {
       console.log (error.name + ' ' + error.message);
       });
+  }
+
+  getCoursesFromDB() {
+    return this.httpClient.get<Course[]>(`${this.API_URL}courses`);
   }
 
   // DEMO ONLY, you can find working methods below
@@ -42,7 +46,15 @@ export class CoursesService {
     this.dialogData = course;
   }
 
-  deleteCourse (id: number): void {
-    console.log(id);
+  deleteCourse (id: number): Observable<Course> {
+    return this.httpClient.delete<Course>(`${this.API_URL}courses/${id}`);
+  }
+
+  editCourse(course: Course): Observable<Course> {
+    return this.httpClient.put<Course>(`${this.API_URL}courses/${course.course_id}`, course);
+  }
+
+  saveCourse(course: Course): Observable<Course> {
+    return this.httpClient.post<Course>(`${this.API_URL}courses`, course);
   }
 }

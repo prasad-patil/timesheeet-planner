@@ -1,1 +1,75 @@
-<p>subjects works!</p>
+<div class="container mat-elevation-z8">
+
+  <div class="form">
+    <mat-form-field floatPlaceholder="never" color="accent">
+      <input matInput #filter placeholder="Filter Subject">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="subject_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Subject Id</mat-header-cell>
+      <mat-cell *matCellDef="let row" >{{row.subject_id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="course_name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Course Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.course.course_name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="course_year">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Course Year</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.course.course_year}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="course_sem">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Course Semister</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.course.course_sem}}</mat-cell>
+    </ng-container>
+
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary" (click)="addNew()">
+          <mat-icon aria-label="Course icon-button with a heart icon" >add</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i=index;">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.subject_id, row.name, row.course)">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.subject_id, row.name, row.course)">
+          <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+
+  <div class="no-results" [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
+    No results
+  </div>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.filteredData?.length"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>

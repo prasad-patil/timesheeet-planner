@@ -2,6 +2,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { CoursesService } from '../../courses.service';
+import { Course } from '../../Courses.model';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Component({
   selector: 'app-baza.dialog',
@@ -11,7 +13,7 @@ import { CoursesService } from '../../courses.service';
 export class EditDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: CoursesService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any, public courseService: CoursesService, public notificationService: NotificationService) { }
 
   formControl = new FormControl('', [
     Validators.required
@@ -32,7 +34,18 @@ export class EditDialogComponent {
     this.dialogRef.close();
   }
 
-  stopEdit(): void {
-    this.dataService.updateCourse(this.data);
+  save(): void {
+    this.courseService.editCourse(this.data).subscribe(({course_id, course_name, course_sem, course_year})=>{
+      let course: Course = {
+        course_id,
+        course_name,
+        course_sem,
+        course_year
+      }
+      this.courseService.updateCourse(course);
+      // this.notificationService.showSuccess('Course has been updated successfully!')
+    }, err => {
+      this.notificationService.showError('There was some error while updating course!')
+    })
   }
 }
