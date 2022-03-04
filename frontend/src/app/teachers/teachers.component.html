@@ -28,13 +28,13 @@
     </ng-container>
 
     <ng-container matColumnDef="subject_name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Sbuject Name</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.subject.name}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Subject Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.subject?.name}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="course_name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Course Name</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.subject.course.course_name}} (Year {{row.subject.course.course_year}} , Sem {{row.subject.course.course_sem}})</mat-cell>
+      <mat-cell *matCellDef="let row"> <span *ngIf="row.subject">{{row.subject?.course.course_name}} (Year {{row.subject?.course.course_year}} , Sem {{row.subject?.course.course_sem}})</span></mat-cell>
     </ng-container>
 
 
@@ -51,7 +51,7 @@
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent">
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.teacher_id, row.firstname, row.lastname, row.subject)">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>

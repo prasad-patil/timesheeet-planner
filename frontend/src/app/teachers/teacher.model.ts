@@ -4,5 +4,5 @@ export class Teacher {
   teacher_id: number;
   firstname: string;
   lastname: string;
-  subject: Subject;
+  subject: Subject | null;
 }

@@ -3,6 +3,7 @@ var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var { Subjects } = require('../models/subjects.js');
+const { Teachers } = require('../models/teacher.js');
 
 // => localhost:3000/teachers/
 router.get('/', (req, res) => {
@@ -72,11 +73,27 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     if ((typeof +req.params.id) !== 'number')
         return res.status(400).send(`No record with given id : ${req.params.id}`);
+        const subjectId = +req.params.id;
+        Teachers.find({}).then(teachers => {
+            const respectiveTeacher = teachers.find((teacher)=> +teacher.subject_id === +subjectId);
+            if (respectiveTeacher) {
+                respectiveTeacher.subject_id = null;
+                Teachers.findOneAndUpdate({teacher_id: respectiveTeacher.teacher_id}, { $set: respectiveTeacher}).then(()=>{
+                    deleteSubject(req, res);
+                })
+            } else {
+                deleteSubject(req, res);
+            }
+        }).catch((err)=>{
+            console.log('Error in Subject Update :' + JSON.stringify(err, undefined, 2));
+        })
+});
 
+function deleteSubject(req, res) {
     Subjects.findOneAndRemove({subject_id: +req.params.id}, (err, doc) => {
         if (!err) { res.send(doc); }
         else { console.log('Error in Subject Delete :' + JSON.stringify(err, undefined, 2)); }
     });
-});
+}
 
 module.exports = router;

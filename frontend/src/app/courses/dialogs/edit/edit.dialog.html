@@ -18,18 +18,27 @@
       </mat-form-field>
     </div>
 
-    <!--Contains mat-hint for characters count and has maxLengt set-->
-    <div class="form">
-      <mat-form-field color="accent">
-        <input matInput #inputstate class="form-control" placeholder="Course Year" [(ngModel)]="data.course_year" name="year" required >
-        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-      </mat-form-field>
-    </div>
 
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #inputstate class="form-control" placeholder="Course Semister" [(ngModel)]="data.course_sem" name="state" required >
-        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        <mat-label>Course Year</mat-label>
+        <mat-select [(ngModel)]="data.course_year" name="course_year" required>
+          <mat-option *ngFor="let year of course_year" [value]="year">
+                {{year}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <mat-label>Course Semister</mat-label>
+        <mat-select [(ngModel)]="data.course_sem" name="course_sem" required>
+          <mat-option *ngFor="let sem of sems" [value]="sem">
+                {{sem}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
 

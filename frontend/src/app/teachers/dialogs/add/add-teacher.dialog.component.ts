@@ -29,9 +29,22 @@ export class AddTeacherDialogComponent implements OnInit{
 
   ngOnInit(): void {
       this.subjectService.getSubject$().subscribe((subjects: Subject[])=>{
-        this.subjects = subjects;
+        this.teacherService.getTeacher$().subscribe((teachers)=>{
+          const availableSubjects = subjects.filter((sub)=> this.isSubjectNotAssigned(teachers, sub.subject_id))
+          this.subjects = availableSubjects;
+        });
       });
   }
+
+  isSubjectNotAssigned(teachers: Teacher[], subjectId: number) {
+    return teachers.find((teacher: Teacher)=> {
+      if (teacher.subject) {
+        return teacher.subject.subject_id !== subjectId;
+      }
+      return false;
+    });
+  }
+
   getErrorMessage() {
     return this.formControl.hasError('required') ? 'Required field' :
       this.formControl.hasError('email') ? 'Not a valid email' :

@@ -10,6 +10,6 @@ export class Issue {
 export class Course {
   course_id: number;
   course_name: string;
-  course_year: string;
+  course_year: number;
   course_sem: number;
 }

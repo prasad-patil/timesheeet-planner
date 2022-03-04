@@ -12,6 +12,8 @@ import { SubjectsService } from '../subjects/subjects.service';
 import { AddTeacherDialogComponent } from './dialogs/add/add-teacher.dialog.component';
 import { EditTeacherDialogComponent } from './dialogs/edit/edit-teacher.dialog.component';
 import { Subject } from '../subjects/subject.models';
+import { DeleteSubjectDialogComponent } from '../subjects/dialogs/delete/delete.dialog.component';
+import { DeleteTeacherDialogComponent } from './dialogs/delete/delete-teacher.dialog.component';
 
 @Component({
   selector: 'app-teachers',
@@ -84,7 +86,7 @@ export class TeachersComponent implements OnInit {
     this.index = i;
     console.log(this.index);
     const dialogRef = this.dialog.open(EditTeacherDialogComponent, {
-      data: {teacher_id, firstname, lastname,  subject_id: subject.subject_id}
+      data: {teacher_id, firstname, lastname,  subject_id: subject?.subject_id}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -100,22 +102,22 @@ export class TeachersComponent implements OnInit {
     });
   }
 
-  // deleteItem(i: number, subject_id: number, name: string, course: Course) {
-  //   this.index = i;
-  //   this.id = subject_id;
-  //   const dialogRef = this.dialog.open(DeleteSubjectDialogComponent, {
-  //     data: {subject_id, name, course}
-  //   });
+  deleteItem(i: number, teacher_id: number, firstname: string, lastname: string, subject: Subject) {
+    this.index = i;
+    this.id = teacher_id;
+    const dialogRef = this.dialog.open(DeleteTeacherDialogComponent, {
+      data: {teacher_id, firstname, lastname,  subject}
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result === 1) {
-  //       this.notificationService.showSuccess('Subject has been deleted successfully!');
-  //       const foundIndex = this.subjectDatabase.dataChange.value.findIndex(x => x.subject_id === this.id);
-  //       this.subjectDatabase.dataChange.value.splice(foundIndex, 1);
-  //       this.refreshTable();
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.notificationService.showSuccess('Teacher has been deleted successfully!');
+        const foundIndex = this.teacherDatabase.dataChange.value.findIndex(x => x.teacher_id === this.id);
+        this.teacherDatabase.dataChange.value.splice(foundIndex, 1);
+        this.refreshTable();
+      }
+    });
+  }
 }
 
 export class TeacherDataSource extends DataSource<Teacher> {
@@ -158,7 +160,7 @@ export class TeacherDataSource extends DataSource<Teacher> {
     return merge(...displayDataChanges).pipe(map( () => {
         // Filter data
         this.filteredData = this.teacherService.data.slice().filter((teacher: Teacher) => {
-          const searchStr = (teacher.firstname + teacher.lastname + teacher.subject.name + teacher.subject.course.course_name).toLowerCase();
+          const searchStr = (teacher.firstname + teacher.lastname + teacher.subject?.name + teacher.subject?.course.course_name).toLowerCase();
           return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
         });
 
@@ -190,8 +192,8 @@ export class TeacherDataSource extends DataSource<Teacher> {
         case 'teacher_id': [propertyA, propertyB] = [a.teacher_id, b.teacher_id]; break;
         case 'firstname': [propertyA, propertyB] = [a.firstname, b.firstname]; break;
         case 'lastname': [propertyA, propertyB] = [a.lastname, b.lastname]; break;
-        case 'subject_name': [propertyA, propertyB] = [a.subject.name, b.subject.name]; break;
-        case 'course_name': [propertyA, propertyB] = [a.subject.course.course_name, b.subject.course.course_name]; break;
+        case 'subject_name': [propertyA, propertyB] = [a.subject ? a.subject?.name : '', b.subject ? b.subject.name : '']; break;
+        case 'course_name': [propertyA, propertyB] = [a.subject ? a.subject?.course.course_name : '', b.subject ? b.subject?.course.course_name : '']; break;
       }
 
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

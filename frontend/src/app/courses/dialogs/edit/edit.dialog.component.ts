@@ -11,6 +11,8 @@ import { NotificationService } from 'src/app/shared/notification.service';
   styleUrls: ['../../dialogs/edit/edit.dialog.css']
 })
 export class EditDialogComponent {
+  sems = [1, 2];
+  course_year = [1,2,3,4];
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, public courseService: CoursesService, public notificationService: NotificationService) { }

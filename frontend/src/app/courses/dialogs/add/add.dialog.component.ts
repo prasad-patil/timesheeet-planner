@@ -12,6 +12,8 @@ import { NotificationService } from 'src/app/shared/notification.service';
 })
 
 export class AddDialogComponent {
+  sems = [1, 2];
+  course_year = [1,2,3,4];
   constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Course,
               private notificationService: NotificationService,
