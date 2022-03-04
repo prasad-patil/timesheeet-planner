@@ -2,7 +2,7 @@
 
   <div class="form">
     <mat-form-field floatPlaceholder="never" color="accent">
-      <input matInput #filter placeholder="Filter Subject">
+      <input matInput #filter placeholder="Filter Teacher">
     </mat-form-field>
   </div>
 
@@ -41,13 +41,13 @@
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
-        <button mat-icon-button color="primary">
+        <button mat-icon-button color="primary" (click)="addNew()">
           <mat-icon aria-label="Course icon-button with a heart icon" >add</mat-icon>
         </button>
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i=index;">
-        <button mat-icon-button color="accent">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.teacher_id, row.firstname, row.lastname, row.subject)">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 

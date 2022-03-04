@@ -54,7 +54,7 @@ router.put('/:id', (req, res) => {
         return res.status(400).send(`No record with given id : ${req.params.id}`);
 
     var teacher = {
-        teacher_id: teacherId,
+        teacher_id: +req.body.teacher_id,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         subject_id: req.body.subject_id,

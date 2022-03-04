@@ -18,6 +18,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { AddSubjectDialogComponent } from './subjects/dialogs/add/add-subject.dialog.component';
 import { EditSubjectDialogComponent } from './subjects/dialogs/edit/edit-subject.dialog.component';
 import { DeleteSubjectDialogComponent } from './subjects/dialogs/delete/delete.dialog.component';
+import { AddTeacherDialogComponent } from './teachers/dialogs/add/add-teacher.dialog.component';
+import { EditTeacherDialogComponent } from './teachers/dialogs/edit/edit-teacher.dialog.component';
+import { DeleteTeacherDialogComponent } from './teachers/dialogs/delete/delete-teacher.dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { DeleteSubjectDialogComponent } from './subjects/dialogs/delete/delete.d
     DeleteDialogComponent,
     AddSubjectDialogComponent,
     EditSubjectDialogComponent,
-    DeleteSubjectDialogComponent
+    DeleteSubjectDialogComponent,
+    AddTeacherDialogComponent,
+    EditTeacherDialogComponent,
+    DeleteTeacherDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -3,12 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject, Observable, Subject, merge, map, fromEvent } from 'rxjs';
+import { BehaviorSubject, Observable, merge, map, fromEvent } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { Teacher } from './teacher.model';
 import { TeachersService } from './teacher.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SubjectsService } from '../subjects/subjects.service';
+import { AddTeacherDialogComponent } from './dialogs/add/add-teacher.dialog.component';
+import { EditTeacherDialogComponent } from './dialogs/edit/edit-teacher.dialog.component';
+import { Subject } from '../subjects/subject.models';
 
 @Component({
   selector: 'app-teachers',
@@ -59,43 +62,43 @@ export class TeachersComponent implements OnInit {
       });
   }
 
-  // addNew() {
-  //   const dialogRef = this.dialog.open(AddSubjectDialogComponent, {
-  //     data: {subject: Subject }
-  //   });
+  addNew() {
+    const dialogRef = this.dialog.open(AddTeacherDialogComponent, {
+      data: {teacher: Teacher }
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result === 1) {
-  //       // After dialog is closed we're doing frontend updates
-  //       // For add we're just pushing a new row inside CoursesService
-  //       this.notificationService.showSuccess('Course has been added successfully!')
-  //       this.subjectDatabase.dataChange.value.push(this.subjectService.getDialogData());
-  //       this.refreshTable();
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // After dialog is closed we're doing frontend updates
+        // For add we're just pushing a new row inside CoursesService
+        this.notificationService.showSuccess('Teacher has been added successfully!')
+        this.teacherDatabase.dataChange.value.push(this.teacherService.getDialogData());
+        this.refreshTable();
+      }
+    });
+  }
 
-  // startEdit(i: number, subject_id: number, name: string, course: Course) {
-  //   this.id = subject_id;
-  //   // index row is used just for debugging proposes and can be removed
-  //   this.index = i;
-  //   console.log(this.index);
-  //   const dialogRef = this.dialog.open(EditSubjectDialogComponent, {
-  //     data: {subject_id, name, course_id: course.course_id}
-  //   });
+  startEdit(i: number, teacher_id: number, firstname: string, lastname: string, subject: Subject) {
+    this.id = teacher_id;
+    // index row is used just for debugging proposes and can be removed
+    this.index = i;
+    console.log(this.index);
+    const dialogRef = this.dialog.open(EditTeacherDialogComponent, {
+      data: {teacher_id, firstname, lastname,  subject_id: subject.subject_id}
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result === 1) {
-  //       this.notificationService.showSuccess('Course has been updated successfully!');
-  //       // When using an edit things are little different, firstly we find record inside CoursesService by id
-  //       const foundIndex = this.subjectDatabase.dataChange.value.findIndex(x => x.subject_id === this.id);
-  //       // Then you update that record using data from dialogData (values you enetered)
-  //       this.subjectDatabase.dataChange.value[foundIndex] = this.subjectService.getDialogData();
-  //       // And lastly refresh table
-  //       this.refreshTable();
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.notificationService.showSuccess('Course has been updated successfully!');
+        // When using an edit things are little different, firstly we find record inside CoursesService by id
+        const foundIndex = this.teacherDatabase.dataChange.value.findIndex(x => x.teacher_id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+        this.teacherDatabase.dataChange.value[foundIndex] = this.teacherService.getDialogData();
+        // And lastly refresh table
+        this.refreshTable();
+      }
+    });
+  }
 
   // deleteItem(i: number, subject_id: number, name: string, course: Course) {
   //   this.index = i;
