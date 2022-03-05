@@ -8,6 +8,7 @@ var courseController = require('./controllers/courseController.js');
 var subjectsController = require('./controllers/subjectController.js');
 var retriveSubjectTeacherByCourseIdController = require('./controllers/retriveSubjectTeacherByCourseIdController.js');
 var generateTimeSheetController = require('./controllers/generateTimeSheetController.js');
+var timeSheetController = require('./controllers/timesheetController.js');
 
 var app = express();
 app.use(bodyParser.json());
@@ -21,3 +22,4 @@ app.use('/courses', courseController);
 app.use('/subjects', subjectsController);
 app.use('/retirveSubjectTeacherByCourse', retriveSubjectTeacherByCourseIdController);
 app.use('/generateTimeSheetController', generateTimeSheetController);
+app.use('/timeSheets', timeSheetController);

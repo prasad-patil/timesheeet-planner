@@ -3,6 +3,7 @@ var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 var { Subjects } = require('../models/subjects.js');
 const { Teachers } = require('../models/teacher.js');
+const { saveTimeSheet, deleteTimeSheet, getTimeSheetById } = require('../utils/timesheet-utils.js')
 
 const day1 = 'MONDAY', day2 = 'TUESDAY', day3 = 'WEDNESDAY',day4 = 'THURSDAY',day5 = 'FRIDAY', day6= 'SATURDAY', day7 ='SUNDAY';
 const slot_timing1 = '9.00 AM - 10.00 AM', slot_timing2= '10.00 AM - 11.00 AM', slot_timing3= '11.00 AM - 12.00 PM', slot_timing4= '12.00 PM - 1.00 PM', slot_timing5= '1.00 PM - 1.30 PM', 
@@ -104,7 +105,16 @@ async function generateTimeTableTable(data) {
             generateForDay(days, slot_index, data, period_index, teachers, subjects)
         }   
     }
+    await saveTimeTableToDatabase(data, days);
     return days;
+}
+
+async function saveTimeTableToDatabase({course_id}, timesheet_data) {
+    await deleteTimeSheet(course_id);
+    await saveTimeSheet({
+        course_id,
+        timesheet_data
+    });
 }
 
 function generateForDay (days, slot_index, data, period_index, teachers, subjects) {
