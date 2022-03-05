@@ -1,7 +1,7 @@
 
   <div class="course-select">
     <mat-form-field>
-      <mat-label>Select Course</mat-label>
+      <mat-label>Please Select a Course</mat-label>
       <mat-select [(ngModel)]="selectedCourseId" name="course" (ngModelChange)="onCourseSelected()">
         <mat-option *ngFor="let course of courses" [value]="course.course_id">
           {{course.course_name}}
@@ -11,11 +11,6 @@
   </div>
   <div class="container mat-elevation-z8">
 
-    <div class="form">
-      <mat-form-field floatPlaceholder="never" color="accent">
-        <input matInput #filter placeholder="Filter Course">
-      </mat-form-field>
-    </div>
 
     <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
       ng update @angular/cli @angular/core
@@ -53,12 +48,4 @@
     <div class="no-results" [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
       No results
     </div>
-
-    <mat-paginator #paginator
-                   [length]="dataSource?.filteredData?.length"
-                   [pageIndex]="0"
-                   [pageSize]="10"
-                   [pageSizeOptions]="[5, 10, 25, 100]">
-    </mat-paginator>
   </div>
-5

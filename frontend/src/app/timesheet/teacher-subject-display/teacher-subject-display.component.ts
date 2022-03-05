@@ -1,8 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { fromEvent, BehaviorSubject, Observable, merge, map } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -31,9 +29,7 @@ export class TeacherSubjectDisplayComponent implements OnInit {
   id: number;
 
   constructor(private httpClient: HttpClient, public teacherSubjectService: SubjectTeacherDataService, public notifcationService: NotificationService, private courseService: CoursesService) { }
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild('filter',  {static: true}) filter: ElementRef;
 
   selectedCourseId: number;
 
@@ -48,14 +44,7 @@ export class TeacherSubjectDisplayComponent implements OnInit {
 
   public loadData(course_id: number) {
     this.subjectTeacherDatabase = new SubjectTeacherDataService(this.httpClient);
-    this.dataSource = new SubjectTeacherDataSource(this.subjectTeacherDatabase, this.paginator, this.sort, course_id);
-    fromEvent(this.filter.nativeElement, 'keyup')
-      .subscribe(() => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      });
+    this.dataSource = new SubjectTeacherDataSource(this.subjectTeacherDatabase, this.sort, course_id);
   }
 
   onCourseSelected() {
@@ -65,29 +54,16 @@ export class TeacherSubjectDisplayComponent implements OnInit {
 }
 
 export class SubjectTeacherDataSource extends DataSource<SubjectTeacher> {
-  _filterChange = new BehaviorSubject('');
   course_id: number;
 
 
-  get filter(): string {
-    return this._filterChange.value;
-  }
-
-  set filter(filter: string) {
-    this._filterChange.next(filter);
-  }
-
-  filteredData: SubjectTeacher[] = [];
   renderedData: SubjectTeacher[] = [];
 
   constructor(public subjectTeacherService: SubjectTeacherDataService,
-              public _paginator: MatPaginator,
               public _sort: MatSort,
               course_id: number) {
     super();
     this.course_id = course_id;
-    // Reset to the first page when the user changes the filter.
-    this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -95,27 +71,15 @@ export class SubjectTeacherDataSource extends DataSource<SubjectTeacher> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.subjectTeacherService.dataChange,
-      this._sort.sortChange,
-      this._filterChange,
-      this._paginator.page
+      this._sort.sortChange
     ];
 
     this.subjectTeacherService.getSubjectTeacher(this.course_id);
 
 
     return merge(...displayDataChanges).pipe(map( () => {
-        // Filter data
-        this.filteredData = this.subjectTeacherService.data.slice().filter((subjectTeacher: SubjectTeacher) => {
-          const searchStr = (subjectTeacher.name + subjectTeacher.teacher?.firstname + subjectTeacher.teacher?.lastname).toLowerCase();
-          return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-        });
-
-        // Sort filtered data
-        const sortedData = this.sortData(this.filteredData.slice());
-
-        // Grab the page's slice of the filtered sorted data.
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-        this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+        const sortedData = this.sortData(this.subjectTeacherService.data.slice());
+        this.renderedData = sortedData;
         return this.renderedData;
       }
     ));
