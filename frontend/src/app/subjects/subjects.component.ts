@@ -98,13 +98,15 @@ export class SubjectsComponent implements OnInit {
   deleteItem(i: number, subject_id: number, name: string, course: Course) {
     this.index = i;
     this.id = subject_id;
+    const data = {subject_id, name, course};
     const dialogRef = this.dialog.open(DeleteSubjectDialogComponent, {
-      data: {subject_id, name, course}
+      data
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         this.notificationService.showSuccess('Subject has been deleted successfully!');
+        this.notificationService.showInfo(`Kindly navigate to teachers menu to assign new subject!`);
         const foundIndex = this.subjectDatabase.dataChange.value.findIndex(x => x.subject_id === this.id);
         this.subjectDatabase.dataChange.value.splice(foundIndex, 1);
         this.refreshTable();
