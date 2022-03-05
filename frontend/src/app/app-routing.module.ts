@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoursesComponent } from './courses/courses.component';
 import { SubjectsComponent } from './subjects/subjects.component';
 import { TeachersComponent } from './teachers/teachers.component';
+import { GenerateTimesheetComponent } from './timesheet/generate-timesheet/generate-timesheet.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'teachers',
     component: TeachersComponent
+  },
+  {
+    path: 'generate',
+    component: GenerateTimesheetComponent
   }
 ];
 

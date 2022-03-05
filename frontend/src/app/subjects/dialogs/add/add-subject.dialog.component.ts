@@ -14,13 +14,7 @@ import { Course } from 'src/app/courses/Courses.model';
 })
 
 export class AddSubjectDialogComponent implements OnInit{
-  selectedCar: string;
   courses: Course[] =[];
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
 
   constructor(public dialogRef: MatDialogRef<AddSubjectDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,

@@ -1,0 +1,64 @@
+
+  <div class="course-select">
+    <mat-form-field>
+      <mat-label>Select Course</mat-label>
+      <mat-select [(ngModel)]="selectedCourseId" name="course" (ngModelChange)="onCourseSelected()">
+        <mat-option *ngFor="let course of courses" [value]="course.course_id">
+          {{course.course_name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="container mat-elevation-z8">
+
+    <div class="form">
+      <mat-form-field floatPlaceholder="never" color="accent">
+        <input matInput #filter placeholder="Filter Course">
+      </mat-form-field>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+      ng update @angular/cli @angular/core
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="subject_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Subject Name</mat-header-cell>
+        <mat-cell *matCellDef="let row" >{{row.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="teacher_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Teacher Name</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.teacher ? row.teacher.firstname + ' ' + row.teacher.lastname: ''}}</mat-cell>
+      </ng-container>
+
+
+      <!-- actions -->
+      <ng-container matColumnDef="hours">
+        <mat-header-cell *matHeaderCellDef>
+            Hours per week
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row; let i=index;">
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+
+    <div class="no-results" [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
+      No results
+    </div>
+
+    <mat-paginator #paginator
+                   [length]="dataSource?.filteredData?.length"
+                   [pageIndex]="0"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div>
+5
