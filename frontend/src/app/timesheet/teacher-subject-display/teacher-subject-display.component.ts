@@ -10,6 +10,7 @@ import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/form
 import {ErrorStateMatcher} from '@angular/material/core';
 import { CoursesService } from 'src/app/courses/courses.service';
 import { Course } from 'src/app/courses/Courses.model';
+import { GenerateTimeSheetService } from '../generate-timesheet/generate-timesheet.service';
 
 interface Food {
   value: string;
@@ -27,8 +28,15 @@ export class TeacherSubjectDisplayComponent implements OnInit {
   dataSource: SubjectTeacherDataSource;
   index: number;
   id: number;
+  hours: any = {};
+  totalHours = 0;
+  MAX_HOURS = 35;
 
-  constructor(private httpClient: HttpClient, public teacherSubjectService: SubjectTeacherDataService, public notifcationService: NotificationService, private courseService: CoursesService) { }
+  constructor(private httpClient: HttpClient,
+              public teacherSubjectService: SubjectTeacherDataService,
+              public notifcationService: NotificationService,
+              private courseService: CoursesService,
+              private genetateTimeSheetService: GenerateTimeSheetService) { }
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   selectedCourseId: number;
@@ -49,6 +57,32 @@ export class TeacherSubjectDisplayComponent implements OnInit {
 
   onCourseSelected() {
     this.loadData(this.selectedCourseId);
+  }
+
+  onChange() {
+    this.totalHours = 0;
+    for (const hr in this.hours) {
+      if (Object.prototype.hasOwnProperty.call(this.hours, hr)) {
+        const element = this.hours[hr];
+        this.totalHours = this.totalHours + element;
+      }
+    }
+  }
+
+  onGenerateTimeTableClick() {
+    const data: any = {};
+    data.course_id = this.selectedCourseId;
+    data.total_hours = this.totalHours;
+    data.periods = [];
+    const teacherSubjectData = this.dataSource.renderedData;
+    teacherSubjectData.forEach((teacherSubject, index)=>{
+      data.periods.push({
+        teacher_id: teacherSubject.teacher?.teacher_id,
+        subject_id: teacherSubject.subject_id,
+        hours: this.hours[index]
+      })
+    })
+    this.genetateTimeSheetService.generateTimeSheet(data).subscribe();
   }
 
 }

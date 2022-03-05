@@ -8,6 +8,13 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="generate-button" (click)="onGenerateTimeTableClick()" [disabled]="!selectedCourseId || totalHours=== 0 || totalHours > MAX_HOURS">Generate Timetable</button>
+    </div>
+
+  </div>
+  <div class="global-error-container" *ngIf="selectedCourseId">
+    <mat-error *ngIf="totalHours > MAX_HOURS">Total Number of hours should be less than {{MAX_HOURS}}.</mat-error>
   </div>
   <div class="container mat-elevation-z8">
 
@@ -36,7 +43,9 @@
         </mat-header-cell>
 
         <mat-cell *matCellDef="let row; let i=index;">
-
+            <mat-form-field appearance="outline">
+              <input matInput #inputstate class="form-control" [(ngModel)]="hours[i]" name="hours" required (ngModelChange)="onChange()" type="number">
+            </mat-form-field>
         </mat-cell>
       </ng-container>
 

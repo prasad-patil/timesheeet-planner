@@ -7,6 +7,7 @@ var teacherController = require('./controllers/teacherController.js');
 var courseController = require('./controllers/courseController.js');
 var subjectsController = require('./controllers/subjectController.js');
 var retriveSubjectTeacherByCourseIdController = require('./controllers/retriveSubjectTeacherByCourseIdController.js');
+var generateTimeSheetController = require('./controllers/generateTimeSheetController.js');
 
 var app = express();
 app.use(bodyParser.json());
@@ -19,3 +20,4 @@ app.use('/teachers', teacherController);
 app.use('/courses', courseController);
 app.use('/subjects', subjectsController);
 app.use('/retirveSubjectTeacherByCourse', retriveSubjectTeacherByCourseIdController);
+app.use('/generateTimeSheetController', generateTimeSheetController);

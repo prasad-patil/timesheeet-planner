@@ -48,10 +48,41 @@
 
 .mat-cell:nth-child(3),
 .mat-header-cell:nth-child(3){
-  flex: 0 0 32%;
+  flex: 0 0 20%;
 }
 
 .course-select .mat-form-field {
-  width: 90%;
   padding: 20px 0 20px 28px;
+  flex-grow: 2;
+}
+
+::ng-deep .mat-form-field-flex > .mat-form-field-infix {
+  padding: 0.4em 0px !important;
+}
+::ng-deep .mat-form-field-label-wrapper {
+  top: -1.5em;
+}
+
+::ng-deep
+  .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label {
+  transform: translateY(-1.1em) scale(0.75);
+  width: 133.33333%;
+}
+.course-select {
+  display: flex;
+  justify-content: space-between;
+}
+.generate-button {
+  float: right;
+  margin-right: 30px;
+}
+
+.button-container {
+  flex-grow: 1;
+  align-self: center;
+}
+
+.global-error-container mat-error {
+  padding: 0 0 10px 26px;
 }

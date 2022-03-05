@@ -10,6 +10,7 @@ export class SubjectTeacherDataService {
 
   private readonly API_URL = 'http://localhost:3000/';
   dataChange: BehaviorSubject<SubjectTeacher[]> = new BehaviorSubject<SubjectTeacher[]>([]);
+  subjectTeacherData: SubjectTeacher[];
 
   constructor(private httpClient: HttpClient) { }
 
@@ -19,6 +20,7 @@ export class SubjectTeacherDataService {
   getSubjectTeacher(course_id: number): void {
     this.getSubjectTeacher$(course_id).subscribe(data => {
         this.dataChange.next(data);
+        this.subjectTeacherData = data;
       },
       (error: HttpErrorResponse) => {
       console.log (error.name + ' ' + error.message);
