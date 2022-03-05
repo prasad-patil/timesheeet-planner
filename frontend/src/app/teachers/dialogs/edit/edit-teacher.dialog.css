@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+.container form {
+  height: 301px;
+}
+
 .form {
   display: flex;
   padding-top: 6px;

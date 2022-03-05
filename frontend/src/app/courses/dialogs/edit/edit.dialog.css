@@ -7,6 +7,9 @@
 .container > * {
   width: 100%;
 }
+.container form {
+  height: 283px;
+}
 
 .form {
   display: flex;
