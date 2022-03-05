@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from 'src/app/courses/courses.service';
 import { GenerateTimeSheetService } from '../generate-timesheet/generate-timesheet.service';
+import {jsPDF} from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-view-timesheet',
@@ -14,6 +16,8 @@ export class ViewTimesheetComponent implements OnInit {
   courseDetails: any;
   courseId: number;
   timings: any;
+  pdfDownloadInProgress = false;
+  @ViewChild('pdfTable', {static: false}) pdfTable: ElementRef;
   constructor(private generateTimeSheetService: GenerateTimeSheetService, private courseService: CoursesService, private route: ActivatedRoute) {
 
   }
@@ -44,6 +48,49 @@ export class ViewTimesheetComponent implements OnInit {
         this.timings.push(element.slot_timing)
       }
     }
+  }
+
+  public downloadAsPDF() {
+    const doc = new jsPDF();
+
+    this.pdfTable.nativeElement.style.maxWidth = '250px'
+    const element = this.pdfTable.nativeElement;
+    this.pdfDownloadInProgress = true;
+
+    html2canvas(element, {
+      scale: 4,
+      height: 800
+    }).then(canvas => {
+      this.pdfDownloadInProgress = false;
+      setTimeout(() => {
+        this.pdfTable.nativeElement.removeAttribute('style');
+        const contentDataURL = canvas.toDataURL('image/png');
+        var doc = new jsPDF();
+
+        doc.setFontSize(20);
+        doc.text("Timetable", 20, 20);
+        doc.addImage(contentDataURL, "JPEG", 15, 40, 180, 180);
+        doc.save('timetable.pdf');
+        doc.internal.scaleFactor = 1.55;
+      }, 0);
+
+  });
+
+    // const specialElementHandlers = {
+    //   '#editor': function () {
+    //     return true;
+    //   }
+    // };
+
+    // const pdfTable = this.pdfTable.nativeElement;
+
+
+    // doc.fromHTML(pdfTable.innerHTML, 15, 15, {
+    //   width: 190,
+    //   'elementHandlers': specialElementHandlers
+    // });
+
+    // doc.save('tableToPdf.pdf');
   }
 
 }

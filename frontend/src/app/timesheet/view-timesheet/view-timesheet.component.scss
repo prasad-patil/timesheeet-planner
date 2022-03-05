@@ -1,0 +1,32 @@
+.timesheet-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 30px;
+}
+.btn-container {
+  align-self: end;
+  margin: 10px 0px;
+}
+.course-container {
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+.course-container span {
+  margin-right: 10px;
+}
+
+.lunch-row {
+    letter-spacing: 77px;
+    font-weight: 900;
+}
+
+mat-spinner {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  vertical-align: middle;
+  margin-top: 200px;
+}
