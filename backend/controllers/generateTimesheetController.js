@@ -1,6 +1,8 @@
 const express = require('express');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
+var { Subjects } = require('../models/subjects.js');
+const { Teachers } = require('../models/teacher.js');
 
 const day1 = 'MONDAY', day2 = 'TUESDAY', day3 = 'WEDNESDAY',day4 = 'THURSDAY',day5 = 'FRIDAY', day6= 'SATURDAY', day7 ='SUNDAY';
 const slot_timing1 = '9.00 AM - 10.00 AM', slot_timing2= '10.00 AM - 11.00 AM', slot_timing3= '11.00 AM - 12.00 PM', slot_timing4= '12.00 PM - 1.00 PM', slot_timing5= '1.00 PM - 1.30 PM', 
@@ -12,7 +14,9 @@ class Slot {
     constructor(teacher_id,subject_id,slot_timing){
         this.teacher_id = teacher_id,
         this.subject_id = subject_id,
-        this.slot_timing = slot_timing
+        this.slot_timing = slot_timing,
+        this.teacher_name = '',
+        this.subject_name = ''
     }
 }
 
@@ -41,10 +45,12 @@ class Day {
         return false;
     }
 
-    assignSlot(slotIndex, slotDetails) {
+    assignSlot(slotIndex, slotDetails, subjects, teachers) {
         const slot = this.getSlot(slotIndex);
         slot.teacher_id = slotDetails.teacher_id;
+        slot.teacher_name = getTeacherById(teachers, slot.teacher_id);
         slot.subject_id = slotDetails.subject_id;
+        slot.subject_name = getSubjectById(subjects, slot.subject_id);
     }
 
     isLunchPeriod(slot) {
@@ -87,19 +93,21 @@ router.post('/', (req, res) => {
 
 async function generateTimeTableTable(data) {
     const days = generateTimetableDataStructure();
+    const teachers = await Teachers.find({});
+    const subjects = await Subjects.find({});
     
     for (let period_index = 0; period_index < data.periods.length; period_index++) {
         for (let slot_index = 0; slot_index <= total_slot; slot_index = slot_index + 2) {
-            generateForDay(days, slot_index, data, period_index)
+            generateForDay(days, slot_index, data, period_index, teachers, subjects)
         }
         for (let slot_index = 1; slot_index <= total_slot; slot_index = slot_index + 2) {
-            generateForDay(days, slot_index, data, period_index)
+            generateForDay(days, slot_index, data, period_index, teachers, subjects)
         }   
     }
     return days;
 }
 
-function generateForDay (days, slot_index, data, period_index) {
+function generateForDay (days, slot_index, data, period_index, teachers, subjects) {
     for (let days_index = 0; days_index < total_days; days_index++) {
         const current_day = days[days_index];
         const current_slot = days[days_index].getSlot([slot_index]);
@@ -109,7 +117,7 @@ function generateForDay (days, slot_index, data, period_index) {
         } else {
             if (current_period.hours > 0) {
                 if (current_day.isSlotAvailable(slot_index)) {
-                    current_day.assignSlot(slot_index, current_period);
+                    current_day.assignSlot(slot_index, current_period, subjects, teachers);
                     current_period.hours = current_period.hours -1;
                 } else {
                     continue;
@@ -117,6 +125,16 @@ function generateForDay (days, slot_index, data, period_index) {
             }
         }
     }
+}
+
+function getSubjectById (subjects, subject_id) {
+    const subject = subjects.find((sub)=> sub.subject_id === subject_id);
+    return subject ? subject.name : '';
+}
+
+function getTeacherById (teachers, teacher_id) {
+    const teacher = teachers.find((current_teacher)=> current_teacher.teacher_id === teacher_id);
+    return teacher ? teacher.firstname + ' ' + (teacher.lastname? teacher.lastname[0].toUpperCase() : '') : '';
 }
 
 module.exports = router;

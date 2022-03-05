@@ -4,7 +4,7 @@
   </div>
   <div class="btn-container"> <button mat-raised-button color="accent"  (click)="downloadAsPDF()">Export To PDF</button></div>
 
-  <table border="5" cellspacing="0" #pdfTable *ngIf="!pdfDownloadInProgress">
+  <table border="2" cellspacing="0" #pdfTable *ngIf="!pdfDownloadInProgress">
     <!--<caption>Timetable</caption>-->
 
     <ng-container *ngFor="let timing of timings;  let i=index;">
@@ -29,7 +29,14 @@
           </td>
           <ng-container *ngFor="let timesheet of timeSheetData;  let timeI=index;">
             <ng-container *ngIf="timesheet['slot' + i].subject_id !== -1 && timesheet['slot' + i].teacher_id !== -1;else lunchRow">
-              <td align="center" height="50">{{timesheet['slot' + i].subject_id}}<br>{{timesheet['slot' + i].teacher_id}}</td>
+              <td align="center" height="50">
+                <span *ngIf="timesheet['slot' + i].subject_name && timesheet['slot' + i].teacher_name;else offRow">
+                  {{timesheet['slot' + i].subject_name}}<br>({{timesheet['slot' + i].teacher_name}})
+                </span>
+                <ng-template #offRow>
+                  <span>OFF</span>
+                </ng-template>
+              </td>
             </ng-container>
             <ng-template #lunchRow>
               <td align="center" height="50" colspan="5" *ngIf="timeI === 0" class="lunch-row">&nbsp;LUNCH</td>
