@@ -5,8 +5,8 @@ import { SubjectsService } from '../../subjects.service';
 
 @Component({
   selector: 'app-delete.dialog',
-  templateUrl: '../../dialogs/delete/delete.dialog.html',
-  styleUrls: ['../../dialogs/delete/delete.dialog.css']
+  templateUrl: '../../dialogs/delete/delete-subject.dialog.html',
+  styleUrls: ['../../dialogs/delete/delete-subject.dialog.css']
 })
 export class DeleteSubjectDialogComponent {
 

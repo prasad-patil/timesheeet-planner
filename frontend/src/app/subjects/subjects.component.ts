@@ -8,7 +8,7 @@ import { BehaviorSubject, fromEvent, map, merge, Observable } from 'rxjs';
 import { Course } from '../courses/Courses.model';
 import { NotificationService } from '../shared/notification.service';
 import { AddSubjectDialogComponent } from './dialogs/add/add-subject.dialog.component';
-import { DeleteSubjectDialogComponent } from './dialogs/delete/delete.dialog.component';
+import { DeleteSubjectDialogComponent } from './dialogs/delete/delete-subject.dialog.component';
 import { EditSubjectDialogComponent } from './dialogs/edit/edit-subject.dialog.component';
 import { Subject } from './subject.models';
 import { SubjectsService } from './subjects.service';

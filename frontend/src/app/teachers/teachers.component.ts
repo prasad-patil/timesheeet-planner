@@ -12,7 +12,7 @@ import { SubjectsService } from '../subjects/subjects.service';
 import { AddTeacherDialogComponent } from './dialogs/add/add-teacher.dialog.component';
 import { EditTeacherDialogComponent } from './dialogs/edit/edit-teacher.dialog.component';
 import { Subject } from '../subjects/subject.models';
-import { DeleteSubjectDialogComponent } from '../subjects/dialogs/delete/delete.dialog.component';
+import { DeleteSubjectDialogComponent } from '../subjects/dialogs/delete/delete-subject.dialog.component';
 import { DeleteTeacherDialogComponent } from './dialogs/delete/delete-teacher.dialog.component';
 
 @Component({
