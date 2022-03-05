@@ -1,0 +1,29 @@
+<table border="5" cellspacing="0" align="center">
+  <!--<caption>Timetable</caption>-->
+
+  <ng-container *ngFor="let timing of timings;  let i=index;">
+      <ng-container *ngIf="i === 0">
+        <tr>
+          <td align="center" height="50"
+            width="140"><br>
+            <b>Day/Period</b><br>
+          </td>
+          <ng-container *ngFor="let timesheet of timeSheetData;  let i=index;">
+            <td align="center" height="50"
+              width="100">
+              <b>{{timesheet.day}}</b>
+            </td>
+          </ng-container>
+        </tr>
+        <tr>
+      </ng-container>
+      <tr>
+        <td align="center" height="50">
+          <b>{{timing}}</b>
+        </td>
+        <ng-container *ngFor="let timesheet of timeSheetData;  let timeI=index;">
+          <td align="center" height="50">{{timesheet['slot' + i].subject_id}}<br>{{timesheet['slot' + i].teacher_id}}</td>
+        </ng-container>
+      </tr>
+  </ng-container>
+</table>

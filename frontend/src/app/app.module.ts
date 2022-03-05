@@ -23,6 +23,7 @@ import { EditTeacherDialogComponent } from './teachers/dialogs/edit/edit-teacher
 import { DeleteTeacherDialogComponent } from './teachers/dialogs/delete/delete-teacher.dialog.component';
 import { GenerateTimesheetComponent } from './timesheet/generate-timesheet/generate-timesheet.component';
 import { TeacherSubjectDisplayComponent } from './timesheet/teacher-subject-display/teacher-subject-display.component';
+import { ViewTimesheetComponent } from './timesheet/view-timesheet/view-timesheet.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TeacherSubjectDisplayComponent } from './timesheet/teacher-subject-disp
     EditTeacherDialogComponent,
     DeleteTeacherDialogComponent,
     GenerateTimesheetComponent,
-    TeacherSubjectDisplayComponent
+    TeacherSubjectDisplayComponent,
+    ViewTimesheetComponent
   ],
   imports: [
     BrowserModule,

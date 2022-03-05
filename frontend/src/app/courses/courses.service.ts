@@ -57,4 +57,8 @@ export class CoursesService {
   saveCourse(course: Course): Observable<Course> {
     return this.httpClient.post<Course>(`${this.API_URL}courses`, course);
   }
+
+  getCourseById(id: number) {
+    return this.httpClient.get<Course>(`${this.API_URL}courses/${id}`);
+  }
 }

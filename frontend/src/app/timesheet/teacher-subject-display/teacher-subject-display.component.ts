@@ -11,6 +11,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import { CoursesService } from 'src/app/courses/courses.service';
 import { Course } from 'src/app/courses/Courses.model';
 import { GenerateTimeSheetService } from '../generate-timesheet/generate-timesheet.service';
+import { Router } from '@angular/router';
 
 interface Food {
   value: string;
@@ -36,7 +37,8 @@ export class TeacherSubjectDisplayComponent implements OnInit {
               public teacherSubjectService: SubjectTeacherDataService,
               public notifcationService: NotificationService,
               private courseService: CoursesService,
-              private genetateTimeSheetService: GenerateTimeSheetService) { }
+              private genetateTimeSheetService: GenerateTimeSheetService,
+              private router: Router) { }
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   selectedCourseId: number;
@@ -82,7 +84,10 @@ export class TeacherSubjectDisplayComponent implements OnInit {
         hours: this.hours[index]
       })
     })
-    this.genetateTimeSheetService.generateTimeSheet(data).subscribe();
+    this.genetateTimeSheetService.generateTimeSheet(data).subscribe((timeTabledata)=>{
+      console.log(timeTabledata);
+      this.router.navigate(['/view-timetable', this.selectedCourseId])
+    });
   }
 
 }

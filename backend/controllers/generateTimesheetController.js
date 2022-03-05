@@ -5,7 +5,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 const day1 = 'MONDAY', day2 = 'TUESDAY', day3 = 'WEDNESDAY',day4 = 'THURSDAY',day5 = 'FRIDAY', day6= 'SATURDAY', day7 ='SUNDAY';
 const slot_timing1 = '9.00 AM - 10.00 AM', slot_timing2= '10.00 AM - 11.00 AM', slot_timing3= '11.00 AM - 12.00 PM', slot_timing4= '12.00 PM - 1.00 PM', slot_timing5= '1.00 PM - 1.30 PM', 
 slot_timing6= '1.30 PM - 2.30 PM', slot_timing7= '2.30 PM - 3.30 PM', slot_timing8= '3.30 PM - 4.30 PM' ;
-const total_slot = 8;
+const total_slot = 7;
 const total_days = 5;
 
 class Slot {
@@ -80,37 +80,43 @@ router.post('/', (req, res) => {
     //         {teacher_id: 1, subject_id: 2, hours: 9}
     //     ]
     // }
-    generateTimeTableTable(req.body).then((result)=>{
+    generateTimeTableTable(req.body).then((result)=> {
         res.send(result);
     });
 });
 
 async function generateTimeTableTable(data) {
-    var result = [];
     const days = generateTimetableDataStructure();
     
     for (let period_index = 0; period_index < data.periods.length; period_index++) {
-        for (let slot_index = 0; slot_index < total_slot; slot_index++) {
-            for (let days_index = 0; days_index < total_days; days_index++) {
-                const current_day = days[days_index];
-                const current_slot = days[days_index].getSlot([slot_index]);
-                const current_period = data.periods[period_index];
-                if (current_day.isLunchPeriod(current_slot)) {
-                    current_day.setLunchPeriod(current_slot);
-                } else {
-                    if (current_period.hours > 0) {
-                        if (current_day.isSlotAvailable(slot_index)) {
-                            current_day.assignSlot(slot_index, current_period);
-                            current_period.hours = current_period.hours -1;
-                        } else {
-                            continue;
-                        }
-                    }
-                }
-            }
+        for (let slot_index = 0; slot_index <= total_slot; slot_index = slot_index + 2) {
+            generateForDay(days, slot_index, data, period_index)
+        }
+        for (let slot_index = 1; slot_index <= total_slot; slot_index = slot_index + 2) {
+            generateForDay(days, slot_index, data, period_index)
         }   
     }
-    return result;
+    return days;
+}
+
+function generateForDay (days, slot_index, data, period_index) {
+    for (let days_index = 0; days_index < total_days; days_index++) {
+        const current_day = days[days_index];
+        const current_slot = days[days_index].getSlot([slot_index]);
+        const current_period = data.periods[period_index];
+        if (current_day.isLunchPeriod(current_slot)) {
+            current_day.setLunchPeriod(current_slot);
+        } else {
+            if (current_period.hours > 0) {
+                if (current_day.isSlotAvailable(slot_index)) {
+                    current_day.assignSlot(slot_index, current_period);
+                    current_period.hours = current_period.hours -1;
+                } else {
+                    continue;
+                }
+            }
+        }
+    }
 }
 
 module.exports = router;
