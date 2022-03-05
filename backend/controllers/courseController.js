@@ -3,7 +3,9 @@ var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var { Courses } = require('../models/courses');
-var { Subjects } =  require('../models/subjects')
+var { Subjects } =  require('../models/subjects');
+var { Teachers } =  require('../models/teacher');
+
 
 // => localhost:3000/courses/
 router.get('/', (req, res) => {
@@ -78,14 +80,17 @@ router.delete('/:id', (req, res) => {
     Subjects.find({}).then(subjects => {
         const respSubjects = subjects.filter((subject)=> subject.course_id === courseId);
         if (respSubjects && respSubjects.length > 0) {
-            const subIds = [];
+            const subIds = [], subject_ids = [];
             respSubjects.forEach(sub => {
                 subIds.push(sub._id);
+                subject_ids.push(sub.subject_id);
             });
-            Subjects.deleteMany({_id: subIds}).then(()=>{
-                deleteCourse(courseId, res);
-            }).catch(()=>{
-                console.log('Error in Course Delete :' + JSON.stringify(err, undefined, 2));
+            delinkRepsectiveTeachers(subject_ids).then(()=>{
+                Subjects.deleteMany({_id: subIds}).then(()=>{
+                    deleteCourse(courseId, res);
+                }).catch(()=>{
+                    console.log('Error in Course Delete :' + JSON.stringify(err, undefined, 2));
+                });
             });
         } else {
             deleteCourse(courseId, res);
@@ -100,5 +105,26 @@ function deleteCourse(courseId, res) {
         else { console.log('Error in Course Delete :' + JSON.stringify(err, undefined, 2)); }
     });
 }
+
+async function delinkRepsectiveTeachers(subjectIds) {
+    try {
+        const teachers = await Teachers.find({});        
+        await asyncForEach(subjectIds, async (subjectId)=> {
+            const respectiveTeacher = teachers.find((teacher)=> +teacher.subject_id === +subjectId);
+            if (respectiveTeacher) {
+                respectiveTeacher.subject_id = null;
+                await Teachers.findOneAndUpdate({teacher_id: respectiveTeacher.teacher_id}, { $set: respectiveTeacher});
+            }
+        });        
+    } catch (err) {
+        console.log('Error in course Update :' + JSON.stringify(err, undefined, 2));
+    }
+}
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
 
 module.exports = router;

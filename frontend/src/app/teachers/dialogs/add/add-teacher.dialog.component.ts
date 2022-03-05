@@ -37,6 +37,9 @@ export class AddTeacherDialogComponent implements OnInit{
   }
 
   isSubjectNotAssigned(teachers: Teacher[], subjectId: number) {
+    if (teachers.length == 0) {
+      return true;
+    }
     return teachers.find((teacher: Teacher)=> {
       if (teacher.subject) {
         return teacher.subject.subject_id !== subjectId;
