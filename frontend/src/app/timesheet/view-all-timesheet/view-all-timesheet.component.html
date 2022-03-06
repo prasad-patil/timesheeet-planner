@@ -22,7 +22,8 @@
         <mat-header-cell *matHeaderCellDef>
         </mat-header-cell>
         <mat-cell *matCellDef="let row; let i=index;">
-          <button mat-raised-button color="primary" [routerLink]="['/view-timetable', row.course_id]">View</button>
+          <button class="action-buttons-view" mat-raised-button color="primary" [routerLink]="['/view-timetable', row.course_id]">View</button>
+          <button mat-raised-button color="warn" (click)="deleteTimeSheet(row.course_id)">Delete</button>
         </mat-cell>
       </ng-container>
 

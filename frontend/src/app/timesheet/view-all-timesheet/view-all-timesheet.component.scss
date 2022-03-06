@@ -2,6 +2,8 @@
 .container {
   display: flex;
   flex-direction: column;
+  max-width: 1000px;
+  margin: 25px auto;
 }
 
 /* Toolbar */
@@ -34,6 +36,9 @@
   padding: 14px;
   font-size: 14px;
   font-style: italic;
+}
+.action-buttons-view {
+  margin-right: 15px;
 }
 
 // .mat-cell:nth-child(1),

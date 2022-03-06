@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 var TimesheetSchema = new Schema({
     course_id: Number,
+    course_name: String,
     timesheet_data: String,
 });
   

@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
-const { getTimeSheetById, getAllTimesheets} = require('../utils/timesheet-utils.js')
+const { getTimeSheetById, getAllTimesheets, deleteTimesheetById} = require('../utils/timesheet-utils.js')
 
 // => localhost:3000/teachers/
 router.get('/', (req, res) => {
@@ -25,6 +25,14 @@ router.get('/:id', (req, res) => {
         console.log('Error in Retriving Teacher :' + JSON.stringify(err, undefined, 2));
     });
 });
-5
+
+router.delete('/:id', (req, res) => {
+    if ((typeof +req.params.id) !== 'number')
+        return res.status(400).send(`No record with given id : ${req.params.id}`);
+
+    deleteTimesheetById(+req.params.id).then((result)=>{
+        res.send(result);
+    })
+});
 
 module.exports = router;

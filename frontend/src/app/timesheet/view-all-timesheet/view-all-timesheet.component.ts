@@ -40,6 +40,17 @@ export class ViewAllTimesheetComponent implements OnInit {
     this.timeSheetDatabase = new TimesheetService(this.httpClient);
     this.dataSource = new TimeSheetDataSource(this.timeSheetDatabase, this.paginator, this.sort);
   }
+
+  deleteTimeSheet(course_id: number) {
+    this.id = course_id;
+    this.timesheetService.deleteTimesheet(course_id).subscribe((data: any)=>{
+      this.notificationService.showSuccess('Timetable delete successfully!');
+      const foundIndex = this.timeSheetDatabase.dataChange.value.findIndex(x => x.course_id === this.id);
+        // for delete we use splice in order to remove single object from CoursesService
+        this.timeSheetDatabase.dataChange.value.splice(foundIndex, 1);
+        this.refreshTable();
+    })
+  }
 }
 
 export class TimeSheetDataSource extends DataSource<any> {

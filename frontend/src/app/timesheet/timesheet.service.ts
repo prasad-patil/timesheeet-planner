@@ -28,4 +28,8 @@ export class TimesheetService {
   getAllTimeSheets() {
     this.getAllTimeSheets$().subscribe()
   }
+
+  deleteTimesheet(course_id: number) {
+    return this.httpClient.delete<any>(`${this.API_URL}timeSheets/${course_id}`);
+  }
 }
