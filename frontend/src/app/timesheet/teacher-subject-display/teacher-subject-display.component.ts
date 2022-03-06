@@ -1,6 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { fromEvent, BehaviorSubject, Observable, merge, map } from 'rxjs';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -14,9 +14,10 @@ import { GenerateTimeSheetService } from '../generate-timesheet/generate-timeshe
 import { Router } from '@angular/router';
 import { TimesheetService } from '../timesheet.service';
 
-interface Food {
-  value: string;
-  viewValue: string;
+const ERROR_LIST:any = {
+  MAX_HOURS: 'Total Number of hours should be less than 35.',
+  REQUIRED: 'Number of hours are required for each subject.',
+  NO_TEACHER: "All subjects in the list do not have assigned teacher. Please assign subject, in Teacher's menu."
 }
 
 @Component({
@@ -24,7 +25,7 @@ interface Food {
   templateUrl: './teacher-subject-display.component.html',
   styleUrls: ['./teacher-subject-display.component.scss']
 })
-export class TeacherSubjectDisplayComponent implements OnInit {
+export class TeacherSubjectDisplayComponent implements OnInit, AfterViewInit {
   displayedColumns = ['subject_name', 'teacher_name', 'hours'];
   subjectTeacherDatabase: SubjectTeacherDataService;
   dataSource: SubjectTeacherDataSource;
@@ -35,6 +36,7 @@ export class TeacherSubjectDisplayComponent implements OnInit {
   MAX_HOURS = 35;
   previousGeneratedTimeTables: number[] =[];
   showPreviousGeneratedWarningInfo: boolean = false;
+  Errors: any[];
 
   constructor(private httpClient: HttpClient,
               public teacherSubjectService: SubjectTeacherDataService,
@@ -43,7 +45,9 @@ export class TeacherSubjectDisplayComponent implements OnInit {
               private genetateTimeSheetService: GenerateTimeSheetService,
               private timetableService: TimesheetService,
               private router: Router) { }
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChildren('inputstate') inputstate: QueryList<ElementRef>;
 
   selectedCourseId: number;
 
@@ -51,12 +55,16 @@ export class TeacherSubjectDisplayComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.Errors = [];
     this.courseService.getCoursesFromDB().subscribe((courses: Course[])=>{
       this.courses = courses;
     });
     this.timetableService.getAllTimeSheets$().subscribe((timesheets)=> timesheets && timesheets.forEach((timesheet: any)=>{
       this.previousGeneratedTimeTables.push(timesheet.course_id)
     }));
+  }
+
+  ngAfterViewInit(): void {
   }
 
   public loadData(course_id: number) {
@@ -74,13 +82,63 @@ export class TeacherSubjectDisplayComponent implements OnInit {
 
   onChange() {
     this.totalHours = 0;
+    this.removeErrorMsg('MAX_HOURS');
     for (const hr in this.hours) {
       if (Object.prototype.hasOwnProperty.call(this.hours, hr)) {
         const element = this.hours[hr];
         this.totalHours = this.totalHours + element;
+        this.totalHours > this.MAX_HOURS && this.addErrorMsg('MAX_HOURS');
       }
     }
+    this.removeRequiredErrorIfNoError();
   }
+
+  onBlur() {
+    console.log(this.inputstate)
+    let noErrors= true;
+    this.inputstate.forEach((input:any)=>{
+      if (input.errors) {
+        input.touched && input.errors.required && this.addErrorMsg('REQUIRED');
+      }
+    });
+    this.removeRequiredErrorIfNoError();
+  }
+
+  onTableContentChanged() {
+    let hasNullTeacher = false;
+    if (this.dataSource && this.dataSource.renderedData && this.dataSource.renderedData.length > 1) {
+      this.dataSource.renderedData.forEach((renderData)=>{
+        if (!renderData.teacher || renderData.teacher?.teacher_id === null) {
+          hasNullTeacher = true;
+        }
+      })
+    }
+
+    if (hasNullTeacher) {
+      this.addErrorMsg('NO_TEACHER');
+    }
+
+  }
+
+  removeRequiredErrorIfNoError() {
+    let errorInputs = this.inputstate.filter((input:any)=> input.errors && input.touched);
+    if ( errorInputs.length == 0) {
+      this.removeErrorMsg('REQUIRED');
+    }
+  }
+
+  removeErrorMsg(err: string) {
+    if (this.Errors.indexOf(ERROR_LIST[err]) > -1) {
+      this.Errors.splice(this.Errors.indexOf(ERROR_LIST[err]), 1);
+    }
+  }
+
+  addErrorMsg(err: string) {
+    if (this.Errors.indexOf(ERROR_LIST[err]) == -1){
+      this.Errors.push(ERROR_LIST[err]);
+    }
+  }
+
 
   onGenerateTimeTableClick() {
     const data: any = {};

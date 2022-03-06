@@ -9,12 +9,12 @@
       </mat-select>
     </mat-form-field>
     <div class="button-container">
-      <button mat-raised-button color="primary" class="generate-button" (click)="onGenerateTimeTableClick()" [disabled]="!selectedCourseId || totalHours=== 0 || totalHours > MAX_HOURS">Generate Timetable</button>
+      <button mat-raised-button color="primary" class="generate-button" (click)="onGenerateTimeTableClick()" [disabled]="!selectedCourseId ||  Errors.length > 0">Generate Timetable</button>
     </div>
 
   </div>
-  <div class="global-error-container" *ngIf="selectedCourseId">
-    <mat-error *ngIf="totalHours > MAX_HOURS">Total Number of hours should be less than {{MAX_HOURS}}.</mat-error>
+  <div class="global-error-container" *ngIf="selectedCourseId && Errors.length > 0">
+    <mat-error *ngFor="let error of Errors" > {{error}}</mat-error>
   </div>
   <div *ngIf="showPreviousGeneratedWarningInfo">
     <p class="delete-info"><mat-icon aria-hidden="false" aria-label="info icon">info</mat-icon> <span class="text"><b>Note:</b> Timetable for this course was previous generated and available in 'Previos Timetable' menu. <br> &nbsp; &nbsp; &nbsp; &nbsp;If you are generating new one, previous will be deleted automatically.</span></p>
@@ -22,7 +22,7 @@
   <div class="container mat-elevation-z8">
 
 
-    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" (contentChanged)="onTableContentChanged()">
       ng update @angular/cli @angular/core
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -47,7 +47,7 @@
 
         <mat-cell *matCellDef="let row; let i=index;">
             <mat-form-field appearance="outline">
-              <input matInput #inputstate class="form-control" [(ngModel)]="hours[i]" name="hours" required (ngModelChange)="onChange()" type="number">
+              <input matInput #inputstate="ngModel" class="form-control" [(ngModel)]="hours[i]" name="hours" required (ngModelChange)="onChange()" (blur)="onBlur()" type="number">
             </mat-form-field>
         </mat-cell>
       </ng-container>
