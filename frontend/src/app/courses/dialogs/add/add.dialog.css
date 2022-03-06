@@ -8,12 +8,12 @@
   width: 100%;
 }
 .container form {
-  height: 283px;
+  height: 295px;
 }
 
 .form {
   display: flex;
-  padding-top: 6px;
+  padding-top: 10px;
 }
 
 .mat-form-field {

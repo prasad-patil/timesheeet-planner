@@ -83,6 +83,8 @@ export class TeacherSubjectDisplayComponent implements OnInit, AfterViewInit {
   onChange() {
     this.totalHours = 0;
     this.removeErrorMsg('MAX_HOURS');
+    this.removeRequiredErrorIfNoError();
+
     for (const hr in this.hours) {
       if (Object.prototype.hasOwnProperty.call(this.hours, hr)) {
         const element = this.hours[hr];
@@ -90,7 +92,16 @@ export class TeacherSubjectDisplayComponent implements OnInit, AfterViewInit {
         this.totalHours > this.MAX_HOURS && this.addErrorMsg('MAX_HOURS');
       }
     }
-    this.removeRequiredErrorIfNoError();
+  }
+
+  hoursIsEmpty() {
+    let isHourEmpty = false;
+    this.inputstate.forEach((input:any)=>{
+      if (input.errors) {
+        isHourEmpty =  input.errors.required;
+      }
+    });
+    return isHourEmpty;
   }
 
   onBlur() {
@@ -106,6 +117,7 @@ export class TeacherSubjectDisplayComponent implements OnInit, AfterViewInit {
 
   onTableContentChanged() {
     let hasNullTeacher = false;
+    this.removeErrorMsg('NO_TEACHER');
     if (this.dataSource && this.dataSource.renderedData && this.dataSource.renderedData.length > 1) {
       this.dataSource.renderedData.forEach((renderData)=>{
         if (!renderData.teacher || renderData.teacher?.teacher_id === null) {

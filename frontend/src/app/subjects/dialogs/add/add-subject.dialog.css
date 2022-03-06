@@ -9,13 +9,13 @@
 }
 
 .container form {
-  height: 223px;
+  height: 240px;
 }
 
 .form {
   display: flex;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .mat-form-field {
