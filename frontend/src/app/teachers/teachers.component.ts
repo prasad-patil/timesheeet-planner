@@ -160,7 +160,7 @@ export class TeacherDataSource extends DataSource<Teacher> {
     return merge(...displayDataChanges).pipe(map( () => {
         // Filter data
         this.filteredData = this.teacherService.data.slice().filter((teacher: Teacher) => {
-          const searchStr = (teacher.firstname + teacher.lastname + teacher.subject?.name + teacher.subject?.course.course_name).toLowerCase();
+          const searchStr = (teacher.firstname + teacher.lastname + teacher.subject?.name + teacher.subject?.course?.course_name).toLowerCase();
           return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
         });
 
@@ -193,7 +193,7 @@ export class TeacherDataSource extends DataSource<Teacher> {
         case 'firstname': [propertyA, propertyB] = [a.firstname, b.firstname]; break;
         case 'lastname': [propertyA, propertyB] = [a.lastname, b.lastname]; break;
         case 'subject_name': [propertyA, propertyB] = [a.subject ? a.subject?.name : '', b.subject ? b.subject.name : '']; break;
-        case 'course_name': [propertyA, propertyB] = [a.subject ? a.subject?.course.course_name : '', b.subject ? b.subject?.course.course_name : '']; break;
+        case 'course_name': [propertyA, propertyB] = [a.subject ? a.subject?.course?.course_name : '', b.subject ? b.subject?.course?.course_name : '']; break;
       }
 
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

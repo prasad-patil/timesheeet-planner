@@ -28,9 +28,9 @@
     <div class="form">
       <mat-form-field color="accent">
         <mat-label>Select Subject</mat-label>
-        <mat-select [(ngModel)]="data.subject_id" name="subject">
-          <mat-option *ngFor="let subject of subjects" [value]="subject.subject_id">
-                {{subject.name}}
+        <mat-select [(ngModel)]="data.subject_id" name="subject" required>
+          <mat-option *ngFor="let subject of availbleSubjects" [value]="subject.subject_id">
+            {{subject.name}} - {{subject?.course?.course_name}} (Year {{subject?.course?.course_year}} , Sem {{subject?.course?.course_sem}})
           </mat-option>
         </mat-select>
       </mat-form-field>

@@ -34,7 +34,7 @@
 
     <ng-container matColumnDef="course_name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Course Name</mat-header-cell>
-      <mat-cell *matCellDef="let row"> <span *ngIf="row.subject">{{row.subject?.course.course_name}} (Year {{row.subject?.course.course_year}} , Sem {{row.subject?.course.course_sem}})</span></mat-cell>
+      <mat-cell *matCellDef="let row"> <span *ngIf="row.subject">{{row.subject?.course?.course_name}} (Year {{row.subject?.course?.course_year}} , Sem {{row.subject?.course?.course_sem}})</span></mat-cell>
     </ng-container>
 
 

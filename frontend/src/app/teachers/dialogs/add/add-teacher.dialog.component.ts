@@ -15,6 +15,7 @@ import { Teacher } from '../../teacher.model';
 
 export class AddTeacherDialogComponent implements OnInit{
   subjects: Subject[] =[];
+  availbleSubjects: Subject[] = [];
 
   constructor(public dialogRef: MatDialogRef<AddTeacherDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,8 +31,21 @@ export class AddTeacherDialogComponent implements OnInit{
   ngOnInit(): void {
       this.subjectService.getSubject$().subscribe((subjects: Subject[])=>{
         this.teacherService.getTeacher$().subscribe((teachers)=>{
-          const availableSubjects = subjects.filter((sub)=> this.isSubjectNotAssigned(teachers, sub.subject_id))
-          this.subjects = availableSubjects;
+          // const availableSubjects = subjects.filter((sub)=> this.isSubjectNotAssigned(teachers, sub.subject_id))
+          this.subjects = subjects;
+          let assignSubjects: number[] = [];
+          let availableSubjects: Subject[] = [];
+          teachers.forEach(teacher=> {
+            if(teacher.subject) {
+              assignSubjects.push(teacher.subject.subject_id);
+            }
+          });
+          subjects.forEach((subject)=>{
+            if (assignSubjects.indexOf(subject.subject_id) == -1) {
+              availableSubjects.push(subject);
+            }
+          })
+          this.availbleSubjects = availableSubjects;
         });
       });
   }
@@ -49,9 +63,7 @@ export class AddTeacherDialogComponent implements OnInit{
   }
 
   getErrorMessage() {
-    return this.formControl.hasError('required') ? 'Required field' :
-      this.formControl.hasError('email') ? 'Not a valid email' :
-        '';
+    return this.formControl.hasError('required') ? 'Required field' : '';
   }
 
   submit() {
