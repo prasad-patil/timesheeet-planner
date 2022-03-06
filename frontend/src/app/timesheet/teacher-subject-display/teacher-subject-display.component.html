@@ -16,6 +16,9 @@
   <div class="global-error-container" *ngIf="selectedCourseId">
     <mat-error *ngIf="totalHours > MAX_HOURS">Total Number of hours should be less than {{MAX_HOURS}}.</mat-error>
   </div>
+  <div *ngIf="showPreviousGeneratedWarningInfo">
+    <p class="delete-info"><mat-icon aria-hidden="false" aria-label="info icon">info</mat-icon> <span class="text"><b>Note:</b> Timetable for this course was previous generated and available in 'Previos Timetable' menu. <br> &nbsp; &nbsp; &nbsp; &nbsp;If you are generating new one, previous will be deleted automatically.</span></p>
+  </div>
   <div class="container mat-elevation-z8">
 
 

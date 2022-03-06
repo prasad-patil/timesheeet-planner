@@ -4,6 +4,7 @@ import { CoursesService } from 'src/app/courses/courses.service';
 import { GenerateTimeSheetService } from '../generate-timesheet/generate-timesheet.service';
 import {jsPDF} from 'jspdf';
 import html2canvas from 'html2canvas';
+import { TimesheetService } from '../timesheet.service';
 
 @Component({
   selector: 'app-view-timesheet',
@@ -18,7 +19,7 @@ export class ViewTimesheetComponent implements OnInit {
   timings: any;
   pdfDownloadInProgress = false;
   @ViewChild('pdfTable', {static: false}) pdfTable: ElementRef;
-  constructor(private generateTimeSheetService: GenerateTimeSheetService, private courseService: CoursesService, private route: ActivatedRoute) {
+  constructor(private timesheetService: TimesheetService, private courseService: CoursesService, private route: ActivatedRoute) {
 
   }
 
@@ -28,12 +29,13 @@ export class ViewTimesheetComponent implements OnInit {
       if (params.id) {
         this.courseService.getCourseById(+params.id).subscribe((course)=>{
           this.courseDetails = course;
-          console.log(course)
+          this.timesheetService.getTimeSheetByCourseID(+params.id).subscribe(timesheetData=> {
+            this.timeSheetData = timesheetData
+            this.getSlotTimngs();
+          });
         })
       }
     });
-    this.timeSheetData = this.generateTimeSheetService.timetableData;
-    this.getSlotTimngs();
   }
 
   getSlotTimngs() {

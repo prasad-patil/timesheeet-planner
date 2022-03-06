@@ -1,0 +1,44 @@
+
+  <div class="container mat-elevation-z8">
+
+    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="course_id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Course Id</mat-header-cell>
+        <mat-cell *matCellDef="let row" >{{row.course_id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="course_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.course_name}}</mat-cell>
+      </ng-container>
+
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i=index;">
+          <button mat-raised-button color="primary" [routerLink]="['/view-timetable', row.course_id]">View</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+
+    <div class="no-results" [style.display]="dataSource?.renderedData?.length == 0 ? '' : 'none'">
+      No results
+    </div>
+
+    <mat-paginator #paginator
+                   [length]="dataSource?.filteredData?.length"
+                   [pageIndex]="0"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </div>

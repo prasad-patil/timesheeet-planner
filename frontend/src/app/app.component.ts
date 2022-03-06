@@ -8,7 +8,13 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 })
 export class AppComponent {
   mobileQuery: MediaQueryList;
-  navMenuList = [{ name: 'Courses', url: 'courses' }, { name: 'Subjects', url: 'subjects' }, { name: 'Teachers', url: 'teachers' }, {name:'Generate Timetable', url: 'generate'}];
+  navMenuList = [
+    { name: 'Courses', url: 'courses' },
+    { name: 'Subjects', url: 'subjects' },
+    { name: 'Teachers', url: 'teachers' },
+    {name:'Generate Timetable', url: 'generate'},
+    {name:'View Timetables', url: 'view-timetable/all'}
+  ];
 
   private _mobileQueryListener: () => void;
 

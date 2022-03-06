@@ -86,3 +86,20 @@
 .global-error-container mat-error {
   padding: 0 0 10px 26px;
 }
+
+.delete-info {
+  margin: 0px 0 20px 28px;
+}
+
+.delete-info mat-icon {
+  font-size: 18px;
+  color: orange;
+  height: 15px;
+  width: 21px;
+  vertical-align: top;
+}
+
+.delete-info .text {
+  vertical-align: text-bottom;
+}
+

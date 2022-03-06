@@ -12,6 +12,7 @@ import { CoursesService } from 'src/app/courses/courses.service';
 import { Course } from 'src/app/courses/Courses.model';
 import { GenerateTimeSheetService } from '../generate-timesheet/generate-timesheet.service';
 import { Router } from '@angular/router';
+import { TimesheetService } from '../timesheet.service';
 
 interface Food {
   value: string;
@@ -32,12 +33,15 @@ export class TeacherSubjectDisplayComponent implements OnInit {
   hours: any = {};
   totalHours = 0;
   MAX_HOURS = 35;
+  previousGeneratedTimeTables: number[] =[];
+  showPreviousGeneratedWarningInfo: boolean = false;
 
   constructor(private httpClient: HttpClient,
               public teacherSubjectService: SubjectTeacherDataService,
               public notifcationService: NotificationService,
               private courseService: CoursesService,
               private genetateTimeSheetService: GenerateTimeSheetService,
+              private timetableService: TimesheetService,
               private router: Router) { }
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -50,6 +54,9 @@ export class TeacherSubjectDisplayComponent implements OnInit {
     this.courseService.getCoursesFromDB().subscribe((courses: Course[])=>{
       this.courses = courses;
     });
+    this.timetableService.getAllTimeSheets$().subscribe((timesheets)=> timesheets && timesheets.forEach((timesheet: any)=>{
+      this.previousGeneratedTimeTables.push(timesheet.course_id)
+    }));
   }
 
   public loadData(course_id: number) {
@@ -58,7 +65,11 @@ export class TeacherSubjectDisplayComponent implements OnInit {
   }
 
   onCourseSelected() {
+    this.showPreviousGeneratedWarningInfo = false;
     this.loadData(this.selectedCourseId);
+    if (this.selectedCourseId) {
+      this.showPreviousGeneratedWarningInfo = this.previousGeneratedTimeTables.indexOf(this.selectedCourseId) > -1;
+    }
   }
 
   onChange() {
